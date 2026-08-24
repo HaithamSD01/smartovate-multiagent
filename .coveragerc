@@ -1,0 +1,9 @@
+[run]
+source = agents, tools, config, memory, api
+omit =
+    streamlit_app.py
+    tests/test_connection.py
+    */__init__.py
+
+[report]
+show_missing = True
