@@ -1,0 +1,61 @@
+{
+  "horodatage": "2026-08-30T21:08:15.491614+00:00",
+  "environnement": "production (Azure Container Apps)",
+  "url": "https://smartovate-mas-api.calmglacier-34682c28.francecentral.azurecontainerapps.io",
+  "statistiques": {
+    "total": 5,
+    "succes": 5,
+    "taux_succes": 100.0,
+    "mediane": 47.27,
+    "min": 25.55,
+    "max": 58.9,
+    "sous_seuil": 5
+  },
+  "resultats": [
+    {
+      "id": "T1",
+      "tache": "Écris une fonction Python qui calcule la suite de Fibonacci.",
+      "statut_final": "TERMINE",
+      "duree_s": 50.87,
+      "nb_messages": 12,
+      "succes": true,
+      "erreur": null
+    },
+    {
+      "id": "T2",
+      "tache": "Écris une fonction Python qui vérifie si une chaîne est un palindrome.",
+      "statut_final": "TERMINE",
+      "duree_s": 58.9,
+      "nb_messages": 19,
+      "succes": true,
+      "erreur": null
+    },
+    {
+      "id": "T3",
+      "tache": "Écris une fonction Python qui trie une liste de dictionnaires par une clé donnée.",
+      "statut_final": "TERMINE",
+      "duree_s": 47.27,
+      "nb_messages": 14,
+      "succes": true,
+      "erreur": null
+    },
+    {
+      "id": "T4",
+      "tache": "Écris une fonction Python qui calcule la factorielle d'un entier, avec gestion des cas limites.",
+      "statut_final": "TERMINE",
+      "duree_s": 25.55,
+      "nb_messages": 12,
+      "succes": true,
+      "erreur": null
+    },
+    {
+      "id": "T5",
+      "tache": "Écris une fonction Python qui fusionne deux listes triées en une seule liste triée.",
+      "statut_final": "TERMINE",
+      "duree_s": 38.36,
+      "nb_messages": 13,
+      "succes": true,
+      "erreur": null
+    }
+  ]
+}

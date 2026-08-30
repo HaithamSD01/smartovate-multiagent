@@ -7,3 +7,10 @@ logs/*.log
 venv/
 .DS_Store
 logs/
+
+__pycache__/
+*.pyc
+
+.coverage
+benchmark_bloc_latex.txt
+*.backup

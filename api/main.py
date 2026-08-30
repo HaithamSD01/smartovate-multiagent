@@ -14,6 +14,10 @@ from __future__ import annotations
 import logging
 import uuid
 
+
+from autogen_agentchat.base import TaskResult
+from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException
+from pydantic import BaseModel, Field
 from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException
 from pydantic import BaseModel, Field
 
@@ -59,14 +63,28 @@ class TaskResponse(BaseModel):
 async def executer_tache(task_id: str, tache: str) -> None:
     session_memory.set(task_id, "statut", "EN_COURS")   # état partagé via Redis
     session_memory.set(task_id, "tache", tache)
+    session_memory.set(task_id, "messages", [])         # liste vide dès le départ
+
+    messages: list[dict] = []
     try:
         equipe = creer_equipe()
-        resultat = await equipe.run(task=tache)
 
-        messages = [
-            {"source": getattr(m, "source", "?"), "contenu": str(getattr(m, "content", m))}
-            for m in resultat.messages
-        ]
+        # run_stream() émet chaque message dès qu'il est produit,
+        # au lieu d'attendre la fin de toute la conversation (MAS-US-3.2).
+        async for evenement in equipe.run_stream(task=tache):
+            # Le dernier élément émis est un TaskResult (récapitulatif global),
+            # pas un message d'agent : on l'ignore pour ne pas dupliquer.
+            if isinstance(evenement, TaskResult):
+                continue
+
+            messages.append({
+                "source": getattr(evenement, "source", "?"),
+                "contenu": str(getattr(evenement, "content", evenement)),
+            })
+            # On republie la liste complète à chaque nouveau message :
+            # c'est ce qui rend l'affichage temps réel possible côté Streamlit.
+            session_memory.set(task_id, "messages", messages)
+
         reponse_finale = messages[-1]["contenu"] if messages else ""
 
         session_memory.set(task_id, "statut", "TERMINE")
@@ -101,6 +119,7 @@ async def consulter_tache(task_id: str) -> dict:
         "task_id": task_id,
         "statut": statut,
         "tache": session_memory.get(task_id, "tache"),
+        "messages": session_memory.get(task_id, "messages", []),
         "reponse": session_memory.get(task_id, "reponse"),
     }
 
